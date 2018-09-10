@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Teste DOM</title>
+  </head>
+  <body>
+    <h1>Teste do DOM</h1>
+
+    <img id="logo" src="aquaman.jpg"
+        alt="Imagem do Aquaman"
+        width="30%"
+        height="30%"
+     />
+     <!-- unordered list -->
+     <ul id="lista">
+       <li>Matemática II</li> <!-- list item -->
+       <li>DBO</li>
+       <li>Física II</li>
+     </ul>
+
+     <input id="disciplina" type="text" />
+     <button id="bt_adicionar">Adicionar</button>
+
+    <script>
+      // var img = document.getElementsByTagName('img')[0];
+      var img = document.getElementById('logo');
+      img.onmouseover = function () {
+        img.setAttribute('width', '400px');
+        img.setAttribute('height', '300px');
+      };
+
+      var button = document.getElementById('bt_adicionar');
+      var input = document.getElementById('disciplina');
+      var ul = document.getElementById('lista');
+
+      button.onclick = function () {
+        var texto = input.value;
+        var li = document.createElement('li');
+        li.textContent = texto;
+        ul.appendChild(li);
+      };
+    </script>
+  </body>
+
+
+
+
+
+
+</html>
