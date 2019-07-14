@@ -1,0 +1,48 @@
+<div class="login">
+    <div class="logado" style="display:none">
+        <img src="" alt="avatar" class="img-circle"
+            width="40" height="40">
+        <span></span>
+        <a href="#" class="btn btn-danger">
+            <span class="fa fa-sign-out"></span>
+            Sair
+        </a>
+    </div>
+    <div class="naologado">
+        <a href="#" class="btn btn-social btn-google">
+            <span class="fa fa-google"></span>
+            Login com Google
+        </a>
+    </div>
+</div>
+
+<form class="form" style="margin-top: 2em;">
+    <textarea name="texto" class="form-control" rows="5" required minlength="5"></textarea>
+    <br>
+    <button type="submit" 
+            class="btn btn-large btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;
+        Publicar
+    </button>        
+</form>
+
+<div class="container avisos" style="margin-top: 2em;">
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js">
+</script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDIUEq7B5D9VQG746UT-GLAAnSGhTziRnw",
+        authDomain: "dbo2017-50544.firebaseapp.com",
+        databaseURL: "https://dbo2017-50544.firebaseio.com",
+        projectId: "dbo2017-50544",
+        storageBucket: "dbo2017-50544.appspot.com",
+        messagingSenderId: "763165281430"
+    };
+    firebase.initializeApp(config);
+</script>
+<script src="js/index.js"></script>

@@ -1,0 +1,83 @@
+<form class="form-inline">
+    <div class="form-group">
+        <label for="cep">CEP :</label>
+        <input type="number" oninput="Cont()" maxlength="8" value="" name="cep" class="form-control" placeholder="00000-000" id="cep" autofocus>
+        <span class="glyphicon glyphicon-remove" id="close_0"></span>
+        <button type="submit" class="btn btn-default" id="submit"><span class="glyphicon glyphicon-search"></span></button>
+    </div>
+    <div class="form-group-2">
+        <label for="comp">Complemento :</label>
+        <input type="text" name="comp" class="form-control" placeholder="Complemento" id="comp" value="" autofocus>
+        <span class="glyphicon glyphicon-remove" id="close_1"></span>
+    </div>
+  </button>
+</form>
+<div id="resultado"></div>
+<div class="alert alert-danger" role="alert">Nenhum resultado encontrado, por favor verifique seu CEP.</div>
+<script id="template" type="text/x-handlebars-template">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>CEP</td>
+                <td>{{cep}}</td>
+            </tr>
+            <tr>
+                <td>Logradouro</td>
+                <td>{{logradouro}}</td>
+            </tr>
+            <tr>
+                <td>Complemento</td>
+                <td>{{complemento}}</td>
+            </tr>
+            <tr>
+                <td>Bairro</td>
+                <td>{{bairro}}</td>
+            </tr>
+            <tr>
+                <td>Localidade</td>
+                <td>{{localidade}}</td>
+            </tr>
+            <tr>
+                <td>Uf</td>
+                <td>{{uf}}</td>
+            </tr>
+            <tr>
+                <td>Unidade</td>
+                <td>{{unidade}}</td>
+            </tr>
+            <tr>
+                <td>Ibge</td>
+                <td>{{ibge}}</td>
+            </tr>
+            <tr>
+                <td>Gia</td>
+                <td>{{gia}}</td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+<script src="js/index.js"></script>
+<script>
+    function Cont (){
+        if (form.cep.value.length < txt.length) {
+            txt = '0' + txt
+            txt = txt.slice(0, btn1.maxLength);
+            form.cep.value = txt;
+        }
+        txt = form.cep.value;
+        if(form.cep.value.length === 1){
+            txt = '00000000' + txt;
+            txt = txt.slice(1, btn1.maxLength+2);
+        } else {
+            for(i=0; i < (8-form.cep.value.length); i++){
+                txt = txt + '0';
+            }
+            if (txt.length > btn1.maxLength) {
+                txt = txt.slice(1, btn1.maxLength+2);
+            }
+        }
+        form.cep.value = txt;
+    }
+    let txt = '';
+    const btn1 = document.querySelector('#cep');
+</script>

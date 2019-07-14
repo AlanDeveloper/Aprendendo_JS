@@ -1,0 +1,79 @@
+var Utils = require("./util"),
+    Headers = require("./headers"),
+    Constants = Utils.Constants,
+    Methods = require("./methods");
+
+module.exports = function (/*Buffer*/input) {
+
+    var _entryHeader = new Headers.EntryHeader(),
+        _entryName = new Buffer(0),
+        _comment = new Buffer(0),
+        _isDirectory = false,
+        uncompressedData = null,
+        _extra = new Buffer(0);
+
+    function getCompressedDataFromZip() {
+        if (!input || !Buffer.isBuffer(input)) {
+            return new Buffer(0);
+        }
+        _entryHeader.loadDataHeaderFromBinary(input);
+        return input.slice(_entryHeader.realDataOffset, _entryHeader.realDataOffset + _entryHeader.compressedSize)
+    }
+
+    function crc32OK(data) {
+        // if bit 3 (0x08) of the general-purpose flags field is set, then the CRC-32 and file sizes are not known when the header is written
+        if (_entryHeader.flags & 0x8 != 0x8) {
+           if (Utils.crc32(data) != _entryHeader.crc) {
+               return false;
+           }
+        } else {
+            // @TODO: load and check data descriptor header
+            // The fields in the local header are filled with zero, and the CRC-32 and size are appended in a 12-byte structure
+            // (optionally preceded by a 4-byte signature) immediately after the compressed data:
+        }
+        return true;
+    }
+
+    function decompress(/*Boolean*/async, /*Function*/callback, /*String*/pass) {
+        if(typeof callback === 'undefined' && typeof async === 'string') {
+            pass=async;
+            async=void 0;
+        }
+        if (_isDirectory) {
+            if (async && callback) {
+                callback(new Buffer(0), Utils.Errors.DIRECTORY_CONTENT_ERROR); //si added error.
+            }
+            return new Buffer(0);
+        }
+
+        var compressedData = getCompressedDataFromZip();
+       
+        if (compressedData.length == 0) {
+            if (async && callback) callback(compressedData, Utils.Errors.NO_DATA);//si added error.
+            return compressedData;
+        }
+
+        var data = new Buffer(_entryHeader.size);
+        data.fill(0);
+
+        switch (_entryHeader.method) {
+            case Utils.Constants.STORED:
+                compressedData.copy(data);
+                if (!crc32OK(data)) {
+                    if (async && callback) callback(data, Utils.Errors.BAD_CRC);//si added error
+                    return Utils.Errors.BAD_CRC;
+                } else {//si added otherwise did not seem to return data.
+                    if (async && callback) callback(data);
+                    return data;
+                }
+                break;
+            case Utils.Constants.DEFLATED:
+                var inflater = new Methods.Inflater(compressedData);
+                if (!async) {
+                    inflater.inflate(data);
+                    if (!crc32OK(data)) {
+                        console.warn(Utils.Errors.BAD_CRC + " " + _entryName.toString())
+                    }
+                    return data;
+                } else {
+   

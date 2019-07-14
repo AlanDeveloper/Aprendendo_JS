@@ -1,0 +1,48 @@
+var fs = require("fs"),
+    pth = require("path");
+
+fs.existsSync = fs.existsSync || pth.existsSync;
+
+var ZipEntry = require("./zipEntry"),
+    ZipFile =  require("./zipFile"),
+    Utils = require("./util");
+
+module.exports = function(/*String*/input) {
+    var _zip = undefined,
+        _filename = "";
+
+    if (input && typeof input === "string") { // load zip file
+        if (fs.existsSync(input)) {
+            _filename = input;
+            _zip = new ZipFile(input, Utils.Constants.FILE);
+        } else {
+           throw Utils.Errors.INVALID_FILENAME;
+        }
+    } else if(input && Buffer.isBuffer(input)) { // load buffer
+        _zip = new ZipFile(input, Utils.Constants.BUFFER);
+    } else { // create new zip file
+        _zip = new ZipFile(null, Utils.Constants.NONE);
+    }
+
+    function getEntry(/*Object*/entry) {
+        if (entry && _zip) {
+            var item;
+            // If entry was given as a file name
+            if (typeof entry === "string")
+                item = _zip.getEntry(entry);
+            // if entry was given as a ZipEntry object
+            if (typeof entry === "object" && entry.entryName != undefined && entry.header != undefined)
+                item =  _zip.getEntry(entry.entryName);
+
+            if (item) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    return {
+        /**
+         * Extracts the given entry from the archive and returns the content as a Buffer object
+         * @param entry ZipEntry object or String with the full path of the entry
+         *
