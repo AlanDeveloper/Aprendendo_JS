@@ -13,6 +13,7 @@
     "eslint": "^4.5.0",
     "eslint-config-google": "^0.9.1",
     "harp": "^0.24.0",
-    "firebase-tools": "^3.12.0"
+    "firebase-tools": "^3.12.0",
+    "lodash": ">=4.17.21"
   }
 }
