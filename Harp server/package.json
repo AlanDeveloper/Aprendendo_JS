@@ -11,7 +11,8 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
-    "harp": "^0.24.0"
+    "harp": "^0.24.0",
+    "lodash": ">=4.17.21"
   },
   "dependencies": {
     "ejs": "^2.6.2"
